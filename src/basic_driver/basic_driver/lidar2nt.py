@@ -5,7 +5,7 @@ import rclpy
 from rclpy.node import Node
 from livox_ros_driver2.msg import CustomMsg
 from sensor_msgs.msg import PointCloud2, PointField
-import struct
+import numpy as np
 from std_msgs.msg import Header
 
 class CustomMsgToPointCloud2(Node):
@@ -74,16 +74,10 @@ class CustomMsgToPointCloud2(Node):
         cloud_msg.row_step = cloud_msg.point_step * cloud_msg.width
         cloud_msg.is_dense = False
 
-        # 拼接点云数据（x/y/z/intensity）
-        cloud_data = bytearray()
-        for point in msg.points:
-            # 将 reflectivity (0~255) 归一化到 0.0~1.0
-            intensity = point.reflectivity / 255.0
-            # 按 float32 格式打包 x/y/z/intensity
-            # 注意：Z轴取反以修正倒置问题
-            cloud_data.extend(struct.pack('ffff', point.x, point.y, point.z, intensity))
-
-        cloud_msg.data = bytes(cloud_data)
+        # 拼接点云数据（x/y/z/intensity）- 使用列表推导式 + NumPy
+        points_list = [[p.x, p.y, p.z, p.reflectivity / 255.0] for p in msg.points]
+        points_array = np.array(points_list, dtype=np.float32)
+        cloud_msg.data = points_array.tobytes()
 
         # 发布标准 PointCloud2 话题
         self.pub.publish(cloud_msg)
