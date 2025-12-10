@@ -59,12 +59,11 @@ class CustomMsgToPointCloud2(Node):
 
         # 构造 PointCloud2 消息
         cloud_msg = PointCloud2()
-        cloud_msg.header = msg.header
 
-        # ⚠️ 关键：确保 frame_id 不为空
+        # 使用原始 Livox 消息的时间戳（保证时间同步）
+        cloud_msg.header = msg.header
         if not cloud_msg.header.frame_id:
             cloud_msg.header.frame_id = 'livox_frame'
-            self.get_logger().warn('frame_id was empty, set to "livox_frame"')
 
         cloud_msg.height = 1
         cloud_msg.width = actual_points  # 使用实际点数
@@ -81,6 +80,8 @@ class CustomMsgToPointCloud2(Node):
 
         # 发布标准 PointCloud2 话题
         self.pub.publish(cloud_msg)
+
+        # self.get_logger().info(f'------timestamp={cloud_msg.header.stamp}------')
 
         # 每 100 帧输出一次信息
         if self.msg_count % 100 == 1:

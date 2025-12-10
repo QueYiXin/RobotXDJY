@@ -13,7 +13,7 @@ def generate_launch_description():
             parameters=[],
             remappings=[]
         ),
-        # 静态坐标变换发布器：map -> livox_frame (重合)
+        # 静态坐标变换发布器：lidar_link -> livox_frame (重合)
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
