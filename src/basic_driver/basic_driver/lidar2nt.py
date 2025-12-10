@@ -3,6 +3,8 @@
 
 import rclpy
 from rclpy.node import Node
+from rclpy.clock import Clock, ClockType
+from rclpy.time import Time
 from livox_ros_driver2.msg import CustomMsg
 from sensor_msgs.msg import PointCloud2, PointField
 import numpy as np
@@ -11,6 +13,10 @@ from std_msgs.msg import Header
 class CustomMsgToPointCloud2(Node):
     def __init__(self):
         super().__init__("custommsg_to_pointcloud2")
+
+        self.system_clock = Clock(clock_type=ClockType.SYSTEM_TIME)
+        self.time_offset = None  # <--- 之前报错就是因为缺了这行
+        self.alpha = 0.01        # <--- 还有这行
 
         # 订阅 Livox 自定义话题
         self.sub = self.create_subscription(
@@ -38,9 +44,10 @@ class CustomMsgToPointCloud2(Node):
         self.is_bigendian = False
 
         self.msg_count = 0
-        self.get_logger().info('CustomMsg to PointCloud2 converter started')
-        self.get_logger().info('Subscribed to: /livox/lidar')
-        self.get_logger().info('Publishing to: /cloud_in')
+        # self.get_logger().info('CustomMsg to PointCloud2 converter started')
+        # self.get_logger().info('Subscribed to: /livox/lidar')
+        # self.get_logger().info('Publishing to: /cloud_in')
+
 
     def callback(self, msg):
         self.msg_count += 1
@@ -62,6 +69,8 @@ class CustomMsgToPointCloud2(Node):
 
         # 使用原始 Livox 消息的时间戳（保证时间同步）
         cloud_msg.header = msg.header
+        cloud_msg.header.stamp = self.get_synced_timestamp(msg.header.stamp)
+        
         if not cloud_msg.header.frame_id:
             cloud_msg.header.frame_id = 'livox_frame'
 
@@ -90,6 +99,34 @@ class CustomMsgToPointCloud2(Node):
                 f'frame_id={cloud_msg.header.frame_id}'
             )
 
+
+    def get_synced_timestamp(self, msg_header_stamp):
+        """
+        核心算法：计算平滑的时间偏差 (Offset)，消除 3s 误差同时保持帧率稳定
+        """
+        # A. 获取“此刻”的系统时间
+        sys_now = self.system_clock.now()
+        sys_sec = sys_now.nanoseconds * 1e-9
+        
+        # B. 获取消息里的“未来”雷达时间
+        msg_time = Time.from_msg(msg_header_stamp)
+        msg_sec = msg_time.nanoseconds * 1e-9
+
+        # C. 计算瞬时误差 (例如 -3.0s)
+        current_diff = sys_sec - msg_sec
+
+        # D. 低通滤波更新 Offset
+        if self.time_offset is None:
+            self.time_offset = current_diff
+            self.get_logger().warn(f'Initial Sync Offset: {self.time_offset:.4f}s')
+        else:
+            # 仅微调 Offset，过滤掉系统调度的抖动
+            self.time_offset = (1 - self.alpha) * self.time_offset + self.alpha * current_diff
+
+        # E. 应用 Offset：将雷达时间平移回现在
+        corrected_sec = msg_sec + self.time_offset
+        
+        return Time(seconds=corrected_sec).to_msg()
 
 def main(args=None):
     rclpy.init(args=args)
