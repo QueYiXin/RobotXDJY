@@ -47,18 +47,18 @@ def generate_launch_description():
             executable='static_transform_publisher',
             name='base_to_livox',
             # arguments: [x y z qx qy qz parent child]
-            arguments=['0', '0', '0', '0', '0', '0', 'base_frame', 'lidar_link'],
+            arguments=['0', '0', '0', '0', '0', '0', 'base_link', 'base_frame'],
             output='screen'
         ),
 
-        # 3. STATIC TF: odom_frame -> base_frame
-        # REQUIRED: Fakes odometry if you don't have wheel encoders.
-        # This provides the transform from 'odom_frame' to 'base_frame'
+        # # 3. STATIC TF: odom_frame -> base_frame
+        # # REQUIRED: Fakes odometry if you don't have wheel encoders.
+        # # This provides the transform from 'odom_frame' to 'base_frame'
         Node(
             package='tf2_ros',
             executable='static_transform_publisher',
             name='odom_to_base',
-            arguments=['0', '0', '0', '0', '0', '0', 'odom_frame', 'base_frame'],
+            arguments=['0', '0', '0', '0', '0', '0', 'odom', 'odom_frame'],
             output='screen'
         ),
         # 4. 启动 SLAM Toolbox (异步SLAM模式)
@@ -72,7 +72,7 @@ def generate_launch_description():
                 {
                     'use_sim_time': False,
                     'scan_topic': '/scan', # <--- 强制在 Launch 里覆盖，防止 YAML 没生效
-                    'odom_frame': 'odom_frame',
+                    'odom_frame': 'odom',
                     'base_frame': 'base_frame'
                 }],
             remappings=[
