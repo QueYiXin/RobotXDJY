@@ -23,7 +23,7 @@ def generate_launch_description():
                 PathJoinSubstitution([
                     FindPackageShare('basic_driver'),
                     'launch',
-                    'livox_slam_launch.py'
+                    'livox2laser_launch.py'
                 ])
             ])
         ),
@@ -47,7 +47,7 @@ def generate_launch_description():
             executable='static_transform_publisher',
             name='base_to_livox',
             # arguments: [x y z qx qy qz parent child]
-            arguments=['0', '0', '0', '0', '0', '0', 'base_frame', 'livox_frame'],
+            arguments=['0', '0', '0', '0', '0', '0', 'base_frame', 'lidar_link'],
             output='screen'
         ),
 
@@ -67,7 +67,14 @@ def generate_launch_description():
             executable='async_slam_toolbox_node',
             name='slam_toolbox',
             output='screen',
-            parameters=[slam_toolbox_config],
+            parameters=[
+                slam_toolbox_config,
+                {
+                    'use_sim_time': False,
+                    'scan_topic': '/scan', # <--- 强制在 Launch 里覆盖，防止 YAML 没生效
+                    'odom_frame': 'odom_frame',
+                    'base_frame': 'base_frame'
+                }],
             remappings=[
                 ('/scan', '/scan')
             ]

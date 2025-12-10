@@ -9,10 +9,10 @@ slam_toolbox:
     ceres_loss_function: None
 
     # ROS Parameters
-    odom_frame: odom
-    map_frame: map
-    base_frame: base_link
+    odom_frame: odom_frame
+    base_frame: base_frame
     scan_topic: /scan
+    map_frame: map
     mode: mapping  # localization
 
     # 纯激光SLAM配置（无里程计）
@@ -56,7 +56,7 @@ slam_toolbox:
     use_response_expansion: true
 
     # # 1. Increase the time we are willing to wait for a transform
-    # transform_timeout: 4.0  # (Default is usually 0.2 or 0.5. Set > 3.0s)
+    transform_timeout: 4.0  # (Default is usually 0.2 or 0.5. Set > 3.0s)
 
     # # 2. Increase the buffer size (tf_buffer_duration) so older TFs are kept
     # tf_buffer_duration: 10.0

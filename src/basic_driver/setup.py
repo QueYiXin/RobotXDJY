@@ -23,9 +23,9 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'lidar2nt = basic_driver.lidar2nt:main',
+            'livox2lidar = basic_driver.livox2lidar:main',
             'camera_viewer = basic_driver.camera_viewer:main',
-            'twist2twiststamped = basic_driver.twist2twiststamped:main',
+            'keyboard_ctrl = basic_driver.keyboard_ctrl:main',
             'wr1_control = basic_driver.wr1_control:main',
             'wr1_server = basic_driver.wr1_server:main',
         ],

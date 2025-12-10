@@ -13,7 +13,7 @@ def generate_launch_description():
                 PathJoinSubstitution([
                     FindPackageShare('basic_driver'),
                     'launch',
-                    'lidar2nt_launch.py'
+                    'livox2lidar_launch.py'
                 ])
             ])
         ),

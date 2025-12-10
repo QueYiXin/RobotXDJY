@@ -7,8 +7,8 @@ def generate_launch_description():
         # Livox CustomMsg 转 PointCloud2 节点
         Node(
             package='basic_driver',
-            executable='lidar2nt',
-            name='lidar2nt',
+            executable='livox2lidar',
+            name='livox2lidar',
             output='screen',
             parameters=[],
             remappings=[]
@@ -23,5 +23,5 @@ def generate_launch_description():
                 '--qx', '0', '--qy', '0', '--qz', '0', '--qw', '1',
                 '--frame-id', 'lidar_link', '--child-frame-id', 'livox_frame'
             ]
-        )
+        ),
     ])

@@ -19,7 +19,7 @@ colcon build --packages-select basic_driver
 ```shell
 # "/livox/lidar -> /cloud_in" 将livox驱动发出的非标准点云转化为标准点云消息格式
 # "livox_frame <-tf-> lidar_link" 链接livox_frame和lidar_link的tf关系
-ros2 launch basic_driver lidar2nt_launch.py 
+ros2 launch basic_driver livox2lidar.py 
 
 # "/cloud_in -> /scan" 将点云数据转化为激光数据
 ros2 launch pointcloud_to_laserscan pointcloud2laserscan_launch.py
