@@ -15,7 +15,7 @@ def generate_launch_description():
             parameters=[{
                 'target_frame': 'livox_frame',  # 使用实际存在的frame
                 'transform_tolerance': 0.1,  # 增加容差到100ms
-                'queue_size': 50,  # 增加队列大小，防止丢消息
+                'queue_size': 2,  # 增加队列大小，防止丢消息
                 'min_height': 0.0,
                 'max_height': 1.0,
                 'angle_min': -3.14159,  # -π (360度扫描)
