@@ -27,41 +27,7 @@ def generate_launch_description():
                 ])
             ])
         ),
-
-        # 2. 发布静态TF: odom -> base_link (如果你的系统已经发布了动态tf，可以注释掉这一段)
-        # 如果你有里程计节点在发布odom->base_link的tf，请注释掉下面这个节点
-        # Node(
-        #     package='tf2_ros',
-        #     executable='static_transform_publisher',
-        #     name='odom_to_base_link_publisher',
-        #     arguments=['0', '0', '0', '0', '0', '0', 'odom_frame', 'base_frame'],
-        #     output='screen'
-        # ),
-
-        # 3. 发布静态TF: base_link -> lidar_link
-        # 这里假设雷达安装在机器人中心，如果雷达有偏移，需要修改x,y,z值
-        # 2. STATIC TF: base_frame -> livox_frame
-        # Connects the Lidar to the Robot Base
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            name='base_to_livox',
-            # arguments: [x y z qx qy qz parent child]
-            arguments=['0', '0', '0', '0', '0', '0', 'base_link', 'base_frame'],
-            output='screen'
-        ),
-
-        # # 3. STATIC TF: odom_frame -> base_frame
-        # # REQUIRED: Fakes odometry if you don't have wheel encoders.
-        # # This provides the transform from 'odom_frame' to 'base_frame'
-        Node(
-            package='tf2_ros',
-            executable='static_transform_publisher',
-            name='odom_to_base',
-            arguments=['0', '0', '0', '0', '0', '0', 'odom', 'odom_frame'],
-            output='screen'
-        ),
-        # 4. 启动 SLAM Toolbox (异步SLAM模式)
+        # 2. 启动 SLAM Toolbox (异步SLAM模式)
         Node(
             package='slam_toolbox',
             executable='async_slam_toolbox_node',
@@ -71,7 +37,7 @@ def generate_launch_description():
                 slam_toolbox_config,
                 {
                     'use_sim_time': False,
-                    'scan_topic': '/scan', # <--- 强制在 Launch 里覆盖，防止 YAML 没生效
+                    'scan_topic': '/scan',
                     'odom_frame': 'odom',
                     'base_frame': 'base_frame'
                 }],
@@ -79,13 +45,4 @@ def generate_launch_description():
                 ('/scan', '/scan')
             ]
         ),
-        # IncludeLaunchDescription(
-        #     PythonLaunchDescriptionSource([
-        #         PathJoinSubstitution([
-        #             FindPackageShare('slam_toolbox'),
-        #             'launch',
-        #             'online_async_launch.py'
-        #         ])
-        #     ]),
-        # ),
     ])
