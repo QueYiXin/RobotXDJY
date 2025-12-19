@@ -8,16 +8,17 @@ from ament_index_python.packages import get_package_share_directory
 import os
 
 def generate_launch_description():
+    pkg_share = get_package_share_directory('basic_driver')
     # 声明 launch 参数
     map_file_arg = DeclareLaunchArgument(
         'map',
-        default_value='/home/qyx/xdjy_ws/map_1765801095.yaml',
+        default_value=os.path.join(pkg_share, 'assert', 'map_1765801095.yaml'),
         description='地图文件的完整路径'
     )
 
     params_file_arg = DeclareLaunchArgument(
         'params_file',
-        default_value='/home/qyx/xdjy_ws/nav2_params.yaml',
+        default_value=os.path.join(pkg_share, 'assert', 'nav2_params.yaml'),
         description='Nav2 参数文件的完整路径'
     )
 
@@ -29,7 +30,7 @@ def generate_launch_description():
 
     rviz2_config_file_arg = DeclareLaunchArgument(
         'rviz2_config',
-        default_value='/home/qyx/xdjy_ws/.rviz2/Nav2.rviz',
+        default_value=os.path.join(pkg_share, 'assert', 'Nav2.rviz'),
         description='rviz2配置文件完整路径'
     )
 
