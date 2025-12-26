@@ -12,13 +12,13 @@ def generate_launch_description():
     # 声明 launch 参数
     map_file_arg = DeclareLaunchArgument(
         'map',
-        default_value=os.path.join(pkg_share, 'assert', 'map_1765801095.yaml'),
+        default_value=os.path.join(pkg_share, 'asset', 'map_r2r.yaml'),
         description='地图文件的完整路径'
     )
 
     params_file_arg = DeclareLaunchArgument(
         'params_file',
-        default_value=os.path.join(pkg_share, 'assert', 'nav2_params.yaml'),
+        default_value=os.path.join(pkg_share, 'config', 'nav2_params.yaml'),
         description='Nav2 参数文件的完整路径'
     )
 
@@ -30,7 +30,7 @@ def generate_launch_description():
 
     rviz2_config_file_arg = DeclareLaunchArgument(
         'rviz2_config',
-        default_value=os.path.join(pkg_share, 'assert', 'Nav2.rviz'),
+        default_value=os.path.join(pkg_share, 'config', 'Nav2.rviz'),
         description='rviz2配置文件完整路径'
     )
 
@@ -74,15 +74,15 @@ def generate_launch_description():
             }.items()
         ),
 
-        # 3. 启动 rviz2
-        Node(
-            package='rviz2',
-            executable='rviz2',
-            name='rviz2',
-            output='screen',
-            arguments=['-d', rviz2_config_file],
-            parameters=[{
-                'use_sim_time': use_sim_time
-            }]
-        ),
+        # # 3. 启动 rviz2
+        # Node(
+        #     package='rviz2',
+        #     executable='rviz2',
+        #     name='rviz2',
+        #     output='screen',
+        #     arguments=['-d', rviz2_config_file],
+        #     parameters=[{
+        #         'use_sim_time': use_sim_time
+        #     }]
+        # ),
     ])

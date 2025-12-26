@@ -112,7 +112,8 @@ xdjy_ws
 │   │   ├── resource
 │   │   │   └── basic_driver
 │   │   ├── setup.cfg
-│   │   └── setup.py
+│   │   ├── setup.py
+│   │   └── asset                           # 一些用到的资产文件如地图
 │   │
 │   ├── livox_ros_driver2       # （开源）livox激光驱动
 │   ├── official_demo           # （官方）示例代码

@@ -54,12 +54,12 @@ def remove_small_clusters(input_pgm, output_pgm, max_noise_size=5):
 
 # --- 运行示例 ---
 if __name__ == "__main__":
-    input_map = "map_1765801095_origin.pgm"
-    output_map = "map_1765801095.pgm"
+    input_map = "map_r2r_origin.pgm"
+    output_map = "map_r2r.pgm"
     
     # 阈值设为 4：
     # - 单个噪点 (面积1) -> 删除
     # - 你描述的横向噪点 [0, 0] (面积2) -> 删除
     # - L型或斜向的小噪点 (面积3或4) -> 删除
     # - 真正的墙壁 (面积通常 > 50) -> 完美保留
-    remove_small_clusters(input_map, output_map, max_noise_size=4)
+    remove_small_clusters(input_map, output_map, max_noise_size=5)
