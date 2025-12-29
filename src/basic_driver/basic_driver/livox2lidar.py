@@ -138,6 +138,9 @@ class CustomMsgToPointCloud2(Node):
             ]
         else:
             # 不过滤
+            # # 加偏移
+            # data_list = [(p.x - 0.1875, p.y - 0.1145, p.z - 0.1089, float(p.reflectivity)) for p in points]
+            # 不加偏移
             data_list = [(p.x, p.y, p.z, float(p.reflectivity)) for p in points]
 
         # 更新实际点数

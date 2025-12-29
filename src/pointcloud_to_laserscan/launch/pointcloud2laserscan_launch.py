@@ -17,7 +17,7 @@ def generate_launch_description():
                 'transform_tolerance': 0.1,  # 增加容差到100ms
                 'queue_size': 2,  # 增加队列大小，防止丢消息
                 'min_height': 0.0,
-                'max_height': 1.0,
+                'max_height': 1.5,
                 'angle_min': -3.14159,  # -π (360度扫描)
                 'angle_max': 3.14159,   # π
                 'angle_increment': 0.0087,  # M_PI/360.0
